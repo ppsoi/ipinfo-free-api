@@ -55,6 +55,7 @@ export async function onRequest(context) {
     modifiedResponse.headers.delete('x-proxied-id');
     modifiedResponse.headers.delete('proxy-domain');
     modifiedResponse.headers.delete('Link');
+    modifiedResponse.headers.delete('via');
 
     return modifiedResponse; // 返回修改后的响应
 }
