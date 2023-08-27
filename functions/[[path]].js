@@ -16,21 +16,23 @@ export async function onRequest(context) {
 
     // 复制原始请求的 headers，并添加自定义 headers
     const myHeaders = new Headers(request.headers);
-    myHeaders.append("domain", "ipinfo.io");
     myHeaders.append("Referer", "https://ipinfo.io/");
-
-    // 提取客户端 IP 地址
-    const getip =
-        url.pathname ||
-        request.headers.get('CF-Connecting-IP') ||
-        request.headers.get('X-Forwarded-For') ||
-        request.headers.get('X-Real-IP') ||
-        request.headers.get('X-Client-IP') ||
-        request.headers.get('X-Cluster-Client-IP') ||
-        request.headers.get('X-Forwarded') ||
-        request.headers.get('Forwarded-For') ||
-        request.headers.get('Forwarded');
-
+    const path = url.pathname
+    let getip
+    if (path == "/" || path == "") {
+        // 提取客户端 IP 地址
+        getip = 
+            request.headers.get('CF-Connecting-IP') ||
+            request.headers.get('X-Forwarded-For') ||
+            request.headers.get('X-Real-IP') ||
+            request.headers.get('X-Client-IP') ||
+            request.headers.get('X-Cluster-Client-IP') ||
+            request.headers.get('X-Forwarded') ||
+            request.headers.get('Forwarded-For') ||
+            request.headers.get('Forwarded');
+    } else {
+        getip = path.replace("/", "")
+    }
     // 构建修改后的请求对象
     const modifiedRequest = new Request('https://ipinfo.io/widget/demo/' + getip + url.search, {
         method: request.method,
