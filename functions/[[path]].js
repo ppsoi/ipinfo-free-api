@@ -21,7 +21,7 @@ export async function onRequest(context) {
 
     // 提取客户端 IP 地址
     const getip =
-        url.pathname.replace('/api/ip/', '') ||
+        url.pathname ||
         request.headers.get('CF-Connecting-IP') ||
         request.headers.get('X-Forwarded-For') ||
         request.headers.get('X-Real-IP') ||
