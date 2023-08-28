@@ -26,7 +26,7 @@ export async function onRequest(context) {
     // 添加新的 Referer header
     myHeaders.append("Referer", "https://ipinfo.io/");
     let getip
-    if (path == "/" || path == "") {
+    if (path == "/api" || path == "/api/") {
         // 提取客户端 IP 地址
         getip = 
             request.headers.get('CF-Connecting-IP') ||
