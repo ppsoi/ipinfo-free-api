@@ -28,7 +28,7 @@ export async function onRequest(context) {
     let getip
     if (path == "/api" || path == "/api/") {
         // 提取客户端 IP 地址
-        getip = 
+        getip =
             request.headers.get('CF-Connecting-IP') ||
             request.headers.get('X-Forwarded-For') ||
             request.headers.get('X-Real-IP') ||
