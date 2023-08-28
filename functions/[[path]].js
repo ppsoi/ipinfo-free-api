@@ -16,8 +16,15 @@ export async function onRequest(context) {
 
     // 复制原始请求的 headers，并添加自定义 headers
     const myHeaders = new Headers(request.headers);
-    myHeaders.append("Referer", "https://ipinfo.io/");
     const path = url.pathname
+    // 删除原来的 Referer header
+    myHeaders.delete("Referer");
+    // 删除原来的 Origin header
+    myHeaders.delete("Origin");
+    // 添加新的 Origin header
+    myHeaders.append("Origin", "https://ipinfo.io/");
+    // 添加新的 Referer header
+    myHeaders.append("Referer", "https://ipinfo.io/");
     let getip
     if (path == "/" || path == "") {
         // 提取客户端 IP 地址
