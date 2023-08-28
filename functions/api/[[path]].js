@@ -38,7 +38,7 @@ export async function onRequest(context) {
             request.headers.get('Forwarded-For') ||
             request.headers.get('Forwarded');
     } else {
-        getip = path.replace("/", "")
+        getip = path.replace("/api/", "")
     }
     // 构建修改后的请求对象
     const modifiedRequest = new Request('https://ipinfo.io/widget/demo/' + getip + url.search, {
