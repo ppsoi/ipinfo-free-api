@@ -51,6 +51,7 @@ export default {
     const url = new URL(window.location.href);
     if (url.searchParams.has("ip")) {
       this.ipAddress = url.searchParams.get("ip");
+      this.hostname = window.location.hostname;
     }
     this.lookupIpAddress();
   },
@@ -58,7 +59,8 @@ export default {
   methods: {
     async lookupIpAddress() {
       try {
-        const response = await axios.get(`https://ipinfo-free.pages.dev/api/${this.ipAddress}`);
+        const url = `https://${this.hostname}/api/${this.ipAddress}`;
+        const response = await axios.get(url);
         this.ipInfo = response.data;
 
         // Save the entered IP address to the cookie
