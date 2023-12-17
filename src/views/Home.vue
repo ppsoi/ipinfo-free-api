@@ -15,7 +15,22 @@
           </div>
         </div>
         <div class="result">
-          <pre v-if="ipInfo"><code>{{ JSON.stringify(ipInfo, null, 2) }}</code></pre>
+          <div class="table-container">
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" v-if="ipInfo">
+              <tbody>
+                <tr v-for="(value, key) in ipInfo" :key="key">
+                  <td>{{ key }}</td>
+                  <td>{{ value }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- <table v-if="ipInfo">
+              <tr v-for="(value, key) in ipInfo" :key="key">
+                <td>{{ key }}</td>
+                <td>{{ value }}</td>
+              </tr>
+            </table> -->
+          </div>
         </div>
       </div>
     </section>
@@ -34,6 +49,12 @@
 <style scoped>
 .my-ip-lookup {
   padding: 20px;
+}
+
+.container {
+  margin-top: 50px;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 </style>
 
@@ -59,15 +80,16 @@ export default {
   methods: {
     async lookupIpAddress() {
       try {
-        const url = `https://${this.hostname}/api/${this.ipAddress}`;
+        // const url = `https://${this.hostname}/api/${this.ipAddress}`;
+        const url = `https://ip.3k.free.hr/api/${this.ipAddress}`;
         const response = await axios.get(url);
-        this.ipInfo = response.data;
+        this.ipInfo = response.data.data;
 
         // Save the entered IP address to the cookie
         this.saveIpAddressToCookie(this.ipAddress);
       } catch (error) {
         console.error('Error fetching IP info:', error);
-        this.ipInfo = 'null';
+        this.ipInfo = null;
       }
     },
     saveIpAddressToCookie(ipAddress) {
