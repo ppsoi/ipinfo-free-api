@@ -19,6 +19,7 @@
             --error-color: #e74c3c;
             --success-bg: #2ecc71;
             --danger-bg: #e74c3c;
+            --container-opacity: 1;
         }
         
         .dark-mode {
@@ -50,6 +51,10 @@
             color: var(--text-color);
             transition: all 0.3s ease;
             line-height: 1.5;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
         }
         
         @media (max-width: 768px) {
@@ -64,6 +69,7 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             padding: 20px;
             margin-bottom: 20px;
+            opacity: var(--container-opacity);
         }
         
         @media (max-width: 768px) {
@@ -82,6 +88,70 @@
             gap: 10px;
         }
         
+        .background-controls {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+            width: 100%;
+        }
+        
+        .bg-input-group {
+            display: flex;
+            flex: 1;
+            min-width: 300px;
+            margin-right: 10px;
+        }
+        
+        .bg-input {
+            flex: 1;
+            min-width: 0;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px 0 0 4px;
+            background-color: var(--container-bg);
+            color: var(--text-color);
+        }
+        
+        .opacity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .opacity-controls label {
+            white-space: nowrap;
+        }
+        
+        .bg-btn {
+            padding: 8px 12px;
+            background-color: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .bg-btn:hover {
+            background-color: var(--button-hover);
+        }
+        
+        .reset-btn {
+            padding: 8px 12px;
+            background-color: var(--danger-bg);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .reset-btn:hover {
+            opacity: 0.9;
+        }
+        
         @media (max-width: 480px) {
             .header-container {
                 flex-direction: column;
@@ -91,6 +161,21 @@
             .mode-toggle {
                 align-self: flex-end;
                 margin-top: -30px;
+            }
+            
+            .background-controls {
+                flex-direction: column;
+            }
+            
+            .bg-input-group {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .opacity-controls {
+                width: 100%;
+                justify-content: space-between;
             }
         }
         
@@ -386,7 +471,7 @@
         <div class="header-container">
             <h1>IP Information</h1>
             <div class="mode-toggle">
-                <span>Dark Mode</span>
+                <span></span>
                 <label class="toggle-switch">
                     <input type="checkbox" id="darkModeToggle">
                     <span class="slider"></span>
@@ -396,7 +481,7 @@
         
         <div class="search-container">
             <div class="search-box">
-                <input type="text" id="ipInput" placeholder="Enter IP address or ASN">
+                <input type="text" id="ipInput" placeholder="Enter IP address, domain or ASN">
                 <button onclick="searchIP()">Search</button>
             </div>
         </div>
@@ -598,7 +683,7 @@
     </div>
     
     <div class="footer">
-        <p>IP Information Lookup Service &copy; 2025</p>
+        <p>IP Information Service &copy; 2025</p>
     </div>
 
     <script>
@@ -609,6 +694,19 @@
             document.body.classList.add('dark-mode');
             darkModeToggle.checked = true;
         }
+        
+        // 设置背景图和透明度（无需用户输入）
+        const bgImageUrl = 'https://i.omoe.tech/file/1739871314880_photo-1579546929518-9e396f3cc809.jpg';  // 你自己的图片链接
+        const containerOpacity = '0.7';  // 你想要的透明度（0~1）
+
+        // 设置背景图
+        document.body.style.backgroundImage = `url('${bgImageUrl}')`;
+        localStorage.setItem('bgImageUrl', bgImageUrl);
+
+        // 设置透明度
+        document.documentElement.style.setProperty('--container-opacity', containerOpacity);
+        localStorage.setItem('containerOpacity', containerOpacity);
+
         
         // Listen for dark mode toggle
         darkModeToggle.addEventListener('change', () => {
