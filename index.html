@@ -37,14 +37,25 @@
             --danger-bg: #b83227;
         }
         
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 12px;
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: all 0.3s ease;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
         }
         
         .container {
@@ -55,16 +66,45 @@
             margin-bottom: 20px;
         }
         
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                border-radius: 6px;
+            }
+        }
+        
         .header-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
             margin-bottom: 20px;
+            gap: 10px;
+        }
+        
+        @media (max-width: 480px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .mode-toggle {
+                align-self: flex-end;
+                margin-top: -30px;
+            }
         }
         
         h1 {
             color: var(--header-color);
             margin: 0;
+            font-size: 24px;
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+                margin-bottom: 5px;
+            }
         }
         
         .mode-toggle {
@@ -128,6 +168,23 @@
             display: flex;
             width: 100%;
             max-width: 600px;
+            flex-direction: row;
+        }
+        
+        @media (max-width: 480px) {
+            .search-box {
+                flex-direction: column;
+            }
+            
+            input {
+                border-radius: 4px;
+                margin-bottom: 10px;
+            }
+            
+            button {
+                border-radius: 4px;
+                width: 100%;
+            }
         }
         
         input {
@@ -162,8 +219,15 @@
         
         .grid-layout {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
         }
         
         .info-card {
@@ -181,14 +245,30 @@
             font-weight: bold;
             display: flex;
             align-items: center;
+            font-size: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .card-header {
+                padding: 10px 12px;
+                font-size: 15px;
+            }
         }
         
         .card-header img {
             margin-right: 10px;
+            width: 24px;
+            height: 18px;
         }
         
         .card-content {
             padding: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .card-content {
+                padding: 8px;
+            }
         }
         
         .main-info {
@@ -198,11 +278,24 @@
             padding: 10px;
             background-color: var(--table-header-bg);
             border-radius: 4px;
+            word-break: break-all;
+        }
+        
+        @media (max-width: 768px) {
+            .main-info {
+                padding: 8px;
+                flex-wrap: wrap;
+            }
+            
+            .main-info strong {
+                margin-right: 5px;
+            }
         }
         
         .info-table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
         }
         
         .info-table tr {
@@ -219,10 +312,20 @@
             color: var(--text-color);
             width: 40%;
             font-weight: 600;
+            word-break: break-word;
         }
         
         .info-table td {
             padding: 8px 10px;
+            word-break: break-all;
+        }
+        
+        @media (max-width: 768px) {
+            .info-table th, 
+            .info-table td {
+                padding: 8px 6px;
+                font-size: 14px;
+            }
         }
         
         .loader {
@@ -293,7 +396,7 @@
         
         <div class="search-container">
             <div class="search-box">
-                <input type="text" id="ipInput" placeholder="Enter IP address, domain or ASN number">
+                <input type="text" id="ipInput" placeholder="Enter IP address or ASN">
                 <button onclick="searchIP()">Search</button>
             </div>
         </div>
@@ -303,7 +406,7 @@
         
         <div id="resultContainer" class="result-container">
             <div class="grid-layout">
-                <!-- 基本信息卡片 -->
+                <!-- Basic Information Card -->
                 <div class="info-card">
                     <div class="card-header">
                         <img id="countryFlag" class="flag" src="/api/placeholder/24/24" alt="flag">
@@ -499,15 +602,15 @@
     </div>
 
     <script>
-        // 暗黑模式切换
+        // Dark mode toggle
         const darkModeToggle = document.getElementById('darkModeToggle');
-        // 检查本地存储的偏好设置
+        // Check local storage for preference
         if (localStorage.getItem('darkMode') === 'enabled') {
             document.body.classList.add('dark-mode');
             darkModeToggle.checked = true;
         }
         
-        // 监听暗黑模式切换
+        // Listen for dark mode toggle
         darkModeToggle.addEventListener('change', () => {
             if (darkModeToggle.checked) {
                 document.body.classList.add('dark-mode');
@@ -518,24 +621,29 @@
             }
         });
         
-        // 页面加载时自动获取当前IP信息
+        // Auto get current IP info on page load
         document.addEventListener('DOMContentLoaded', function() {
             getCurrentIP();
+            
+            // Adjust for mobile - Check if it's a touch device
+            if ('ontouchstart' in window) {
+                document.body.classList.add('touch-device');
+            }
         });
         
-        // 获取当前IP
+        // Get current IP
         function getCurrentIP() {
             document.getElementById('loader').style.display = 'block';
             fetch('/api')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('网络请求失败');
+                        throw new Error('Network request failed');
                     }
                     return response.text();
                 })
                 .then(text => {
                     try {
-                        // 尝试解析为JSON
+                        // Try parsing as JSON
                         const data = JSON.parse(text);
                         if (data && data.data) {
                             displayResults(data);
@@ -543,7 +651,7 @@
                             showError('Unable to get IP information');
                         }
                     } catch (e) {
-                        // 如果不是有效的JSON，显示错误
+                        // If not valid JSON, show error
                         console.error("JSON parsing failed:", e);
                         showError('API returned non-JSON data, please check the API endpoint');
                     }
@@ -556,11 +664,11 @@
                 });
         }
         
-        // 搜索IP
+        // Search IP
         function searchIP() {
             const ipInput = document.getElementById('ipInput').value.trim();
             if (!ipInput) {
-                showError('Please enter a valid IP address, ASN number');
+                showError('Please enter a valid IP address, domain or ASN number');
                 return;
             }
             
@@ -571,13 +679,13 @@
             fetch(`/api/${ipInput}`)
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('网络请求失败');
+                        throw new Error('Network request failed');
                     }
                     return response.text();
                 })
                 .then(text => {
                     try {
-                        // 尝试解析为JSON
+                        // Try parsing as JSON
                         const data = JSON.parse(text);
                         if (data && data.data) {
                             displayResults(data);
@@ -585,30 +693,30 @@
                             showError('Unable to get IP information');
                         }
                     } catch (e) {
-                        // 如果不是有效的JSON，显示错误
+                        // If not valid JSON, show error
                         console.error("JSON parsing failed:", e);
-                        showError('API返回了非JSON数据，请检查API端点');
+                        showError('API returned non-JSON data, please check the API endpoint');
                     }
                 })
                 .catch(error => {
-                    showError('请求失败: ' + error.message);
+                    showError('Request failed: ' + error.message);
                 })
                 .finally(() => {
                     document.getElementById('loader').style.display = 'none';
                 });
         }
         
-        // 显示结果
+        // Display results
         function displayResults(data) {
             const ipData = data.data;
             
-            // 设置IP地址和国旗
+            // Set IP address and flag
             document.getElementById('ip').textContent = ipData.ip || '-';
             if (ipData.country) {
                 document.getElementById('countryFlag').src = `https://flagcdn.com/24x18/${ipData.country.toLowerCase()}.png`;
             }
             
-            // 基本信息
+            // Basic information
             document.getElementById('city').textContent = ipData.city || '-';
             document.getElementById('region').textContent = ipData.region || '-';
             document.getElementById('country').textContent = ipData.country || '-';
@@ -617,7 +725,7 @@
             document.getElementById('timezone').textContent = ipData.timezone || '-';
             document.getElementById('org').textContent = ipData.org || '-';
             
-            // ASN 信息
+            // ASN information
             if (ipData.asn) {
                 document.getElementById('asn').textContent = ipData.asn.asn || '-';
                 document.getElementById('asnName').textContent = ipData.asn.name || '-';
@@ -632,7 +740,7 @@
                 document.getElementById('asnType').textContent = '-';
             }
             
-            // 公司信息
+            // Company information
             if (ipData.company) {
                 document.getElementById('companyName').textContent = ipData.company.name || '-';
                 document.getElementById('companyDomain').textContent = ipData.company.domain || '-';
@@ -643,7 +751,7 @@
                 document.getElementById('companyType').textContent = '-';
             }
             
-            // 隐私信息
+            // Privacy information
             if (ipData.privacy) {
                 document.getElementById('vpn').innerHTML = getBooleanTag(ipData.privacy.vpn);
                 document.getElementById('proxy').innerHTML = getBooleanTag(ipData.privacy.proxy);
@@ -660,14 +768,14 @@
                 document.getElementById('service').textContent = '-';
             }
             
-            // IP 类型
+            // IP type
             document.getElementById('anycast').innerHTML = getBooleanTag(ipData.is_anycast);
             document.getElementById('mobile').innerHTML = getBooleanTag(ipData.is_mobile);
             document.getElementById('anonymous').innerHTML = getBooleanTag(ipData.is_anonymous);
             document.getElementById('satellite').innerHTML = getBooleanTag(ipData.is_satellite);
             document.getElementById('isHosting').innerHTML = getBooleanTag(ipData.is_hosting);
             
-            // 滥用信息
+            // Abuse information
             if (ipData.abuse) {
                 document.getElementById('abuseAddress').textContent = ipData.abuse.address || '-';
                 document.getElementById('abuseCountry').textContent = ipData.abuse.country || '-';
@@ -684,11 +792,16 @@
                 document.getElementById('abusePhone').textContent = '-';
             }
             
-            // 显示结果容器
+            // Show results container
             document.getElementById('resultContainer').style.display = 'block';
+            
+            // Scroll to results on mobile
+            if (window.innerWidth <= 768) {
+                document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+            }
         }
         
-        // 获取布尔值标签
+        // Get boolean tag
         function getBooleanTag(value) {
             if (value === true) {
                 return '<span class="tag tag-true">Yes</span>';
@@ -699,7 +812,7 @@
             }
         }
         
-        // 显示错误信息
+        // Show error message
         function showError(message) {
             const errorElement = document.getElementById('errorMessage');
             errorElement.textContent = message;
@@ -707,7 +820,7 @@
             document.getElementById('resultContainer').style.display = 'none';
         }
         
-        // 按下回车键时触发搜索
+        // Trigger search on Enter key press
         document.getElementById('ipInput').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
