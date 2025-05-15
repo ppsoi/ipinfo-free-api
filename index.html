@@ -5,47 +5,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IP信息查询</title>
     <style>
+        :root {
+            --bg-color: #f7f7f7;
+            --container-bg: #fff;
+            --text-color: #333;
+            --header-color: #2c3e50;
+            --border-color: #eee;
+            --button-bg: #3498db;
+            --button-hover: #2980b9;
+            --table-header-bg: #f8f9fa;
+            --table-border: #dee2e6;
+            --error-bg: #ffeaea;
+            --error-color: #e74c3c;
+            --success-bg: #2ecc71;
+            --danger-bg: #e74c3c;
+        }
+        
+        .dark-mode {
+            --bg-color: #1a1a1a;
+            --container-bg: #2d2d2d;
+            --text-color: #e0e0e0;
+            --header-color: #61dafb;
+            --border-color: #444;
+            --button-bg: #3498db;
+            --button-hover: #61dafb;
+            --table-header-bg: #383838;
+            --table-border: #444;
+            --error-bg: #5e2a2a;
+            --error-color: #ff6b6b;
+            --success-bg: #1b7a44;
+            --danger-bg: #b83227;
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f7f7f7;
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
         }
+        
         .container {
-            background-color: #fff;
+            background-color: var(--container-bg);
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             padding: 20px;
             margin-bottom: 20px;
         }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
+        
+        h1 {
+            color: var(--header-color);
+            margin: 0;
+        }
+        
+        .mode-toggle {
+            display: flex;
+            align-items: center;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin-left: 10px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #3498db;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
         .search-container {
             display: flex;
             justify-content: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
+        
         .search-box {
             display: flex;
             width: 100%;
             max-width: 600px;
         }
+        
         input {
             flex: 1;
             padding: 12px 15px;
             font-size: 16px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 4px 0 0 4px;
             outline: none;
+            background-color: var(--container-bg);
+            color: var(--text-color);
         }
+        
         button {
             padding: 12px 20px;
-            background-color: #3498db;
+            background-color: var(--button-bg);
             color: white;
             border: none;
             border-radius: 0 4px 4px 0;
@@ -53,64 +151,83 @@
             font-size: 16px;
             transition: background-color 0.3s;
         }
+        
         button:hover {
-            background-color: #2980b9;
+            background-color: var(--button-hover);
         }
+        
         .result-container {
             display: none;
-            margin-top: 20px;
         }
-        .result-header {
+        
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-card {
+            background-color: var(--container-bg);
+            border-radius: 8px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .card-header {
+            background-color: var(--button-bg);
+            color: white;
+            padding: 12px 15px;
+            font-weight: bold;
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
         }
-        .result-header h2 {
-            margin: 0;
-            margin-left: 15px;
-            color: #2c3e50;
+        
+        .card-header img {
+            margin-right: 10px;
         }
-        .flag {
-            width: 32px;
-            height: 32px;
+        
+        .card-content {
+            padding: 10px;
+        }
+        
+        .main-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: var(--table-header-bg);
             border-radius: 4px;
         }
-        table {
+        
+        .info-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
-        .info-table {
-            margin-bottom: 30px;
+        
+        .info-table tr {
+            border-bottom: 1px solid var(--table-border);
         }
+        
+        .info-table tr:last-child {
+            border-bottom: none;
+        }
+        
         .info-table th {
             text-align: left;
-            padding: 12px 15px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
-            color: #495057;
-            width: 30%;
+            padding: 8px 10px;
+            color: var(--text-color);
+            width: 40%;
+            font-weight: 600;
         }
+        
         .info-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #dee2e6;
+            padding: 8px 10px;
         }
-        .section-header {
-            margin: 30px 0 15px 0;
-            color: #2c3e50;
-            font-size: 18px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-        .ip-header {
-            font-size: 24px;
-            margin-top: 0;
-        }
+        
         .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            border-top: 5px solid var(--button-bg);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -118,46 +235,61 @@
             margin: 20px auto;
             display: none;
         }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
         .error-message {
-            color: #e74c3c;
+            color: var(--error-color);
             text-align: center;
             padding: 15px;
-            background-color: #ffeaea;
+            background-color: var(--error-bg);
             border-radius: 4px;
             margin-top: 20px;
             display: none;
         }
+        
         .tag {
             display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 3px 6px;
+            border-radius: 3px;
             font-size: 12px;
             font-weight: bold;
-            margin-right: 8px;
         }
+        
         .tag-true {
-            background-color: #e74c3c;
+            background-color: var(--danger-bg);
             color: white;
         }
+        
         .tag-false {
-            background-color: #2ecc71;
+            background-color: var(--success-bg);
             color: white;
         }
+        
         .footer {
             text-align: center;
-            margin-top: 50px;
-            color: #7f8c8d;
+            margin-top: 20px;
+            color: var(--text-color);
+            opacity: 0.7;
             font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>IP 信息查询</h1>
+        <div class="header-container">
+            <h1>IP 信息查询</h1>
+            <div class="mode-toggle">
+                <span>暗黑模式</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
         
         <div class="search-container">
             <div class="search-box">
@@ -170,174 +302,223 @@
         <div id="errorMessage" class="error-message"></div>
         
         <div id="resultContainer" class="result-container">
-            <div class="result-header">
-                <img id="countryFlag" class="flag" src="/api/placeholder/32/32" alt="国旗">
-                <h2 id="ipAddress" class="ip-header">IP 信息</h2>
+            <div class="grid-layout">
+                <!-- 基本信息卡片 -->
+                <div class="info-card">
+                    <div class="card-header">
+                        <img id="countryFlag" class="flag" src="/api/placeholder/24/24" alt="国旗">
+                        基本信息
+                    </div>
+                    <div class="card-content">
+                        <div class="main-info">
+                            <strong>IP: </strong>
+                            <span id="ip"></span>
+                        </div>
+                        <table class="info-table">
+                            <tr>
+                                <th>城市</th>
+                                <td id="city"></td>
+                            </tr>
+                            <tr>
+                                <th>地区</th>
+                                <td id="region"></td>
+                            </tr>
+                            <tr>
+                                <th>国家</th>
+                                <td id="country"></td>
+                            </tr>
+                            <tr>
+                                <th>邮政编码</th>
+                                <td id="postal"></td>
+                            </tr>
+                            <tr>
+                                <th>地理位置</th>
+                                <td id="loc"></td>
+                            </tr>
+                            <tr>
+                                <th>时区</th>
+                                <td id="timezone"></td>
+                            </tr>
+                            <tr>
+                                <th>组织</th>
+                                <td id="org"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- 网络信息卡片 -->
+                <div class="info-card">
+                    <div class="card-header">网络信息</div>
+                    <div class="card-content">
+                        <table class="info-table">
+                            <tr>
+                                <th>ASN</th>
+                                <td id="asn"></td>
+                            </tr>
+                            <tr>
+                                <th>ASN 名称</th>
+                                <td id="asnName"></td>
+                            </tr>
+                            <tr>
+                                <th>ASN 域名</th>
+                                <td id="asnDomain"></td>
+                            </tr>
+                            <tr>
+                                <th>路由</th>
+                                <td id="route"></td>
+                            </tr>
+                            <tr>
+                                <th>类型</th>
+                                <td id="asnType"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 公司信息卡片 -->
+                <div class="info-card">
+                    <div class="card-header">公司信息</div>
+                    <div class="card-content">
+                        <table class="info-table">
+                            <tr>
+                                <th>公司名称</th>
+                                <td id="companyName"></td>
+                            </tr>
+                            <tr>
+                                <th>公司域名</th>
+                                <td id="companyDomain"></td>
+                            </tr>
+                            <tr>
+                                <th>公司类型</th>
+                                <td id="companyType"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- 隐私信息卡片 -->
+                <div class="info-card">
+                    <div class="card-header">隐私信息</div>
+                    <div class="card-content">
+                        <table class="info-table">
+                            <tr>
+                                <th>VPN</th>
+                                <td id="vpn"></td>
+                            </tr>
+                            <tr>
+                                <th>代理</th>
+                                <td id="proxy"></td>
+                            </tr>
+                            <tr>
+                                <th>Tor</th>
+                                <td id="tor"></td>
+                            </tr>
+                            <tr>
+                                <th>中继</th>
+                                <td id="relay"></td>
+                            </tr>
+                            <tr>
+                                <th>主机托管</th>
+                                <td id="hosting"></td>
+                            </tr>
+                            <tr>
+                                <th>服务</th>
+                                <td id="service"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- IP类型卡片 -->
+                <div class="info-card">
+                    <div class="card-header">IP 类型</div>
+                    <div class="card-content">
+                        <table class="info-table">
+                            <tr>
+                                <th>Anycast</th>
+                                <td id="anycast"></td>
+                            </tr>
+                            <tr>
+                                <th>移动网络</th>
+                                <td id="mobile"></td>
+                            </tr>
+                            <tr>
+                                <th>匿名代理</th>
+                                <td id="anonymous"></td>
+                            </tr>
+                            <tr>
+                                <th>卫星网络</th>
+                                <td id="satellite"></td>
+                            </tr>
+                            <tr>
+                                <th>主机提供商</th>
+                                <td id="isHosting"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- 滥用举报联系信息卡片 -->
+                <div class="info-card">
+                    <div class="card-header">滥用举报联系信息</div>
+                    <div class="card-content">
+                        <table class="info-table">
+                            <tr>
+                                <th>地址</th>
+                                <td id="abuseAddress"></td>
+                            </tr>
+                            <tr>
+                                <th>国家</th>
+                                <td id="abuseCountry"></td>
+                            </tr>
+                            <tr>
+                                <th>邮箱</th>
+                                <td id="abuseEmail"></td>
+                            </tr>
+                            <tr>
+                                <th>联系人</th>
+                                <td id="abuseName"></td>
+                            </tr>
+                            <tr>
+                                <th>网络范围</th>
+                                <td id="abuseNetwork"></td>
+                            </tr>
+                            <tr>
+                                <th>电话</th>
+                                <td id="abusePhone"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
-            
-            <h3 class="section-header">基本信息</h3>
-            <table class="info-table">
-                <tr>
-                    <th>IP 地址</th>
-                    <td id="ip"></td>
-                </tr>
-                <tr>
-                    <th>城市</th>
-                    <td id="city"></td>
-                </tr>
-                <tr>
-                    <th>地区</th>
-                    <td id="region"></td>
-                </tr>
-                <tr>
-                    <th>国家</th>
-                    <td id="country"></td>
-                </tr>
-                <tr>
-                    <th>邮政编码</th>
-                    <td id="postal"></td>
-                </tr>
-                <tr>
-                    <th>地理位置</th>
-                    <td id="loc"></td>
-                </tr>
-                <tr>
-                    <th>时区</th>
-                    <td id="timezone"></td>
-                </tr>
-                <tr>
-                    <th>组织</th>
-                    <td id="org"></td>
-                </tr>
-            </table>
-            
-            <h3 class="section-header">网络信息</h3>
-            <table class="info-table">
-                <tr>
-                    <th>ASN</th>
-                    <td id="asn"></td>
-                </tr>
-                <tr>
-                    <th>ASN 名称</th>
-                    <td id="asnName"></td>
-                </tr>
-                <tr>
-                    <th>ASN 域名</th>
-                    <td id="asnDomain"></td>
-                </tr>
-                <tr>
-                    <th>路由</th>
-                    <td id="route"></td>
-                </tr>
-                <tr>
-                    <th>类型</th>
-                    <td id="asnType"></td>
-                </tr>
-            </table>
-            
-            <h3 class="section-header">公司信息</h3>
-            <table class="info-table">
-                <tr>
-                    <th>公司名称</th>
-                    <td id="companyName"></td>
-                </tr>
-                <tr>
-                    <th>公司域名</th>
-                    <td id="companyDomain"></td>
-                </tr>
-                <tr>
-                    <th>公司类型</th>
-                    <td id="companyType"></td>
-                </tr>
-            </table>
-            
-            <h3 class="section-header">隐私信息</h3>
-            <table class="info-table">
-                <tr>
-                    <th>VPN</th>
-                    <td id="vpn"></td>
-                </tr>
-                <tr>
-                    <th>代理</th>
-                    <td id="proxy"></td>
-                </tr>
-                <tr>
-                    <th>Tor</th>
-                    <td id="tor"></td>
-                </tr>
-                <tr>
-                    <th>中继</th>
-                    <td id="relay"></td>
-                </tr>
-                <tr>
-                    <th>主机托管</th>
-                    <td id="hosting"></td>
-                </tr>
-                <tr>
-                    <th>服务</th>
-                    <td id="service"></td>
-                </tr>
-            </table>
-            
-            <h3 class="section-header">IP 类型</h3>
-            <table class="info-table">
-                <tr>
-                    <th>Anycast</th>
-                    <td id="anycast"></td>
-                </tr>
-                <tr>
-                    <th>移动网络</th>
-                    <td id="mobile"></td>
-                </tr>
-                <tr>
-                    <th>匿名代理</th>
-                    <td id="anonymous"></td>
-                </tr>
-                <tr>
-                    <th>卫星网络</th>
-                    <td id="satellite"></td>
-                </tr>
-                <tr>
-                    <th>主机提供商</th>
-                    <td id="isHosting"></td>
-                </tr>
-            </table>
-            
-            <h3 class="section-header">滥用举报联系信息</h3>
-            <table class="info-table">
-                <tr>
-                    <th>地址</th>
-                    <td id="abuseAddress"></td>
-                </tr>
-                <tr>
-                    <th>国家</th>
-                    <td id="abuseCountry"></td>
-                </tr>
-                <tr>
-                    <th>邮箱</th>
-                    <td id="abuseEmail"></td>
-                </tr>
-                <tr>
-                    <th>联系人</th>
-                    <td id="abuseName"></td>
-                </tr>
-                <tr>
-                    <th>网络范围</th>
-                    <td id="abuseNetwork"></td>
-                </tr>
-                <tr>
-                    <th>电话</th>
-                    <td id="abusePhone"></td>
-                </tr>
-            </table>
         </div>
     </div>
     
     <div class="footer">
-        <p>IP信息查询服务 &copy; 2024</p>
+        <p>IP信息查询服务 &copy; 2025</p>
     </div>
 
     <script>
+        // 暗黑模式切换
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        // 检查本地存储的偏好设置
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.checked = true;
+        }
+        
+        // 监听暗黑模式切换
+        darkModeToggle.addEventListener('change', () => {
+            if (darkModeToggle.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+        
         // 页面加载时自动获取当前IP信息
         document.addEventListener('DOMContentLoaded', function() {
             getCurrentIP();
@@ -351,13 +532,21 @@
                     if (!response.ok) {
                         throw new Error('网络请求失败');
                     }
-                    return response.json();
+                    return response.text();
                 })
-                .then(data => {
-                    if (data && data.data) {
-                        displayResults(data);
-                    } else {
-                        showError('无法获取IP信息');
+                .then(text => {
+                    try {
+                        // 尝试解析为JSON
+                        const data = JSON.parse(text);
+                        if (data && data.data) {
+                            displayResults(data);
+                        } else {
+                            showError('无法获取IP信息');
+                        }
+                    } catch (e) {
+                        // 如果不是有效的JSON，显示错误
+                        console.error("解析JSON失败:", e);
+                        showError('API返回了非JSON数据，请检查API端点');
                     }
                 })
                 .catch(error => {
@@ -385,13 +574,21 @@
                     if (!response.ok) {
                         throw new Error('网络请求失败');
                     }
-                    return response.json();
+                    return response.text();
                 })
-                .then(data => {
-                    if (data && data.data) {
-                        displayResults(data);
-                    } else {
-                        showError('无法获取IP信息');
+                .then(text => {
+                    try {
+                        // 尝试解析为JSON
+                        const data = JSON.parse(text);
+                        if (data && data.data) {
+                            displayResults(data);
+                        } else {
+                            showError('无法获取IP信息');
+                        }
+                    } catch (e) {
+                        // 如果不是有效的JSON，显示错误
+                        console.error("解析JSON失败:", e);
+                        showError('API返回了非JSON数据，请检查API端点');
                     }
                 })
                 .catch(error => {
@@ -407,13 +604,12 @@
             const ipData = data.data;
             
             // 设置IP地址和国旗
-            document.getElementById('ipAddress').textContent = ipData.ip;
+            document.getElementById('ip').textContent = ipData.ip || '-';
             if (ipData.country) {
-                document.getElementById('countryFlag').src = `https://flagcdn.com/48x36/${ipData.country.toLowerCase()}.png`;
+                document.getElementById('countryFlag').src = `https://flagcdn.com/24x18/${ipData.country.toLowerCase()}.png`;
             }
             
             // 基本信息
-            document.getElementById('ip').textContent = ipData.ip || '-';
             document.getElementById('city').textContent = ipData.city || '-';
             document.getElementById('region').textContent = ipData.region || '-';
             document.getElementById('country').textContent = ipData.country || '-';
@@ -429,6 +625,12 @@
                 document.getElementById('asnDomain').textContent = ipData.asn.domain || '-';
                 document.getElementById('route').textContent = ipData.asn.route || '-';
                 document.getElementById('asnType').textContent = ipData.asn.type || '-';
+            } else {
+                document.getElementById('asn').textContent = '-';
+                document.getElementById('asnName').textContent = '-';
+                document.getElementById('asnDomain').textContent = '-';
+                document.getElementById('route').textContent = '-';
+                document.getElementById('asnType').textContent = '-';
             }
             
             // 公司信息
@@ -436,6 +638,10 @@
                 document.getElementById('companyName').textContent = ipData.company.name || '-';
                 document.getElementById('companyDomain').textContent = ipData.company.domain || '-';
                 document.getElementById('companyType').textContent = ipData.company.type || '-';
+            } else {
+                document.getElementById('companyName').textContent = '-';
+                document.getElementById('companyDomain').textContent = '-';
+                document.getElementById('companyType').textContent = '-';
             }
             
             // 隐私信息
@@ -446,6 +652,13 @@
                 document.getElementById('relay').innerHTML = getBooleanTag(ipData.privacy.relay);
                 document.getElementById('hosting').innerHTML = getBooleanTag(ipData.privacy.hosting);
                 document.getElementById('service').textContent = ipData.privacy.service || '-';
+            } else {
+                document.getElementById('vpn').innerHTML = '-';
+                document.getElementById('proxy').innerHTML = '-';
+                document.getElementById('tor').innerHTML = '-';
+                document.getElementById('relay').innerHTML = '-';
+                document.getElementById('hosting').innerHTML = '-';
+                document.getElementById('service').textContent = '-';
             }
             
             // IP 类型
@@ -463,6 +676,13 @@
                 document.getElementById('abuseName').textContent = ipData.abuse.name || '-';
                 document.getElementById('abuseNetwork').textContent = ipData.abuse.network || '-';
                 document.getElementById('abusePhone').textContent = ipData.abuse.phone || '-';
+            } else {
+                document.getElementById('abuseAddress').textContent = '-';
+                document.getElementById('abuseCountry').textContent = '-';
+                document.getElementById('abuseEmail').textContent = '-';
+                document.getElementById('abuseName').textContent = '-';
+                document.getElementById('abuseNetwork').textContent = '-';
+                document.getElementById('abusePhone').textContent = '-';
             }
             
             // 显示结果容器
