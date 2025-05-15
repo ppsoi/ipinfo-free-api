@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP信息查询</title>
+    <title>IP Information Lookup</title>
     <style>
         :root {
             --bg-color: #f7f7f7;
@@ -281,9 +281,9 @@
 <body>
     <div class="container">
         <div class="header-container">
-            <h1>IP 信息查询</h1>
+            <h1>IP Information Lookup</h1>
             <div class="mode-toggle">
-                <span>暗黑模式</span>
+                <span>Dark Mode</span>
                 <label class="toggle-switch">
                     <input type="checkbox" id="darkModeToggle">
                     <span class="slider"></span>
@@ -293,8 +293,8 @@
         
         <div class="search-container">
             <div class="search-box">
-                <input type="text" id="ipInput" placeholder="输入 IP 地址、域名或 ASN 号码">
-                <button onclick="searchIP()">查询</button>
+                <input type="text" id="ipInput" placeholder="Enter IP address, domain or ASN number">
+                <button onclick="searchIP()">Search</button>
             </div>
         </div>
         
@@ -306,8 +306,8 @@
                 <!-- 基本信息卡片 -->
                 <div class="info-card">
                     <div class="card-header">
-                        <img id="countryFlag" class="flag" src="/api/placeholder/24/24" alt="国旗">
-                        基本信息
+                        <img id="countryFlag" class="flag" src="/api/placeholder/24/24" alt="flag">
+                        Basic Information
                     </div>
                     <div class="card-content">
                         <div class="main-info">
@@ -316,40 +316,39 @@
                         </div>
                         <table class="info-table">
                             <tr>
-                                <th>城市</th>
+                                <th>City</th>
                                 <td id="city"></td>
                             </tr>
                             <tr>
-                                <th>地区</th>
+                                <th>Region</th>
                                 <td id="region"></td>
                             </tr>
                             <tr>
-                                <th>国家</th>
+                                <th>Country</th>
                                 <td id="country"></td>
                             </tr>
                             <tr>
-                                <th>邮政编码</th>
+                                <th>Postal Code</th>
                                 <td id="postal"></td>
                             </tr>
                             <tr>
-                                <th>地理位置</th>
+                                <th>Location</th>
                                 <td id="loc"></td>
                             </tr>
                             <tr>
-                                <th>时区</th>
+                                <th>Timezone</th>
                                 <td id="timezone"></td>
                             </tr>
                             <tr>
-                                <th>组织</th>
+                                <th>Organization</th>
                                 <td id="org"></td>
                             </tr>
                         </table>
                     </div>
                 </div>
                 
-                <!-- 网络信息卡片 -->
                 <div class="info-card">
-                    <div class="card-header">网络信息</div>
+                    <div class="card-header">Network Information</div>
                     <div class="card-content">
                         <table class="info-table">
                             <tr>
@@ -357,49 +356,49 @@
                                 <td id="asn"></td>
                             </tr>
                             <tr>
-                                <th>ASN 名称</th>
+                                <th>ASN Name</th>
                                 <td id="asnName"></td>
                             </tr>
                             <tr>
-                                <th>ASN 域名</th>
+                                <th>ASN Domain</th>
                                 <td id="asnDomain"></td>
                             </tr>
                             <tr>
-                                <th>路由</th>
+                                <th>Route</th>
                                 <td id="route"></td>
                             </tr>
                             <tr>
-                                <th>类型</th>
+                                <th>Type</th>
                                 <td id="asnType"></td>
                             </tr>
                         </table>
                     </div>
                 </div>
 
-                <!-- 公司信息卡片 -->
+                <!-- Company Information -->
                 <div class="info-card">
-                    <div class="card-header">公司信息</div>
+                    <div class="card-header">Company Information</div>
                     <div class="card-content">
                         <table class="info-table">
                             <tr>
-                                <th>公司名称</th>
+                                <th>Company Name</th>
                                 <td id="companyName"></td>
                             </tr>
                             <tr>
-                                <th>公司域名</th>
+                                <th>Company Domain</th>
                                 <td id="companyDomain"></td>
                             </tr>
                             <tr>
-                                <th>公司类型</th>
+                                <th>Company Type</th>
                                 <td id="companyType"></td>
                             </tr>
                         </table>
                     </div>
                 </div>
                 
-                <!-- 隐私信息卡片 -->
+                <!-- Privacy Information -->
                 <div class="info-card">
-                    <div class="card-header">隐私信息</div>
+                    <div class="card-header">Privacy Information</div>
                     <div class="card-content">
                         <table class="info-table">
                             <tr>
@@ -407,7 +406,7 @@
                                 <td id="vpn"></td>
                             </tr>
                             <tr>
-                                <th>代理</th>
+                                <th>Proxy</th>
                                 <td id="proxy"></td>
                             </tr>
                             <tr>
@@ -415,24 +414,24 @@
                                 <td id="tor"></td>
                             </tr>
                             <tr>
-                                <th>中继</th>
+                                <th>Relay</th>
                                 <td id="relay"></td>
                             </tr>
                             <tr>
-                                <th>主机托管</th>
+                                <th>Hosting</th>
                                 <td id="hosting"></td>
                             </tr>
                             <tr>
-                                <th>服务</th>
+                                <th>Service</th>
                                 <td id="service"></td>
                             </tr>
                         </table>
                     </div>
                 </div>
                 
-                <!-- IP类型卡片 -->
+                <!-- IP Type -->
                 <div class="info-card">
-                    <div class="card-header">IP 类型</div>
+                    <div class="card-header">IP Type</div>
                     <div class="card-content">
                         <table class="info-table">
                             <tr>
@@ -440,52 +439,52 @@
                                 <td id="anycast"></td>
                             </tr>
                             <tr>
-                                <th>移动网络</th>
+                                <th>Mobile Network</th>
                                 <td id="mobile"></td>
                             </tr>
                             <tr>
-                                <th>匿名代理</th>
+                                <th>Anonymous Proxy</th>
                                 <td id="anonymous"></td>
                             </tr>
                             <tr>
-                                <th>卫星网络</th>
+                                <th>Satellite</th>
                                 <td id="satellite"></td>
                             </tr>
                             <tr>
-                                <th>主机提供商</th>
+                                <th>Hosting Provider</th>
                                 <td id="isHosting"></td>
                             </tr>
                         </table>
                     </div>
                 </div>
                 
-                <!-- 滥用举报联系信息卡片 -->
+                <!-- Abuse Contact -->
                 <div class="info-card">
-                    <div class="card-header">滥用举报联系信息</div>
+                    <div class="card-header">Abuse Contact Information</div>
                     <div class="card-content">
                         <table class="info-table">
                             <tr>
-                                <th>地址</th>
+                                <th>Address</th>
                                 <td id="abuseAddress"></td>
                             </tr>
                             <tr>
-                                <th>国家</th>
+                                <th>Country</th>
                                 <td id="abuseCountry"></td>
                             </tr>
                             <tr>
-                                <th>邮箱</th>
+                                <th>Email</th>
                                 <td id="abuseEmail"></td>
                             </tr>
                             <tr>
-                                <th>联系人</th>
+                                <th>Contact</th>
                                 <td id="abuseName"></td>
                             </tr>
                             <tr>
-                                <th>网络范围</th>
+                                <th>Network</th>
                                 <td id="abuseNetwork"></td>
                             </tr>
                             <tr>
-                                <th>电话</th>
+                                <th>Phone</th>
                                 <td id="abusePhone"></td>
                             </tr>
                         </table>
@@ -496,7 +495,7 @@
     </div>
     
     <div class="footer">
-        <p>IP信息查询服务 &copy; 2025</p>
+        <p>IP Information Lookup Service &copy; 2025</p>
     </div>
 
     <script>
@@ -541,16 +540,16 @@
                         if (data && data.data) {
                             displayResults(data);
                         } else {
-                            showError('无法获取IP信息');
+                            showError('Unable to get IP information');
                         }
                     } catch (e) {
                         // 如果不是有效的JSON，显示错误
-                        console.error("解析JSON失败:", e);
-                        showError('API返回了非JSON数据，请检查API端点');
+                        console.error("JSON parsing failed:", e);
+                        showError('API returned non-JSON data, please check the API endpoint');
                     }
                 })
                 .catch(error => {
-                    showError('请求失败: ' + error.message);
+                    showError('Request failed: ' + error.message);
                 })
                 .finally(() => {
                     document.getElementById('loader').style.display = 'none';
@@ -561,7 +560,7 @@
         function searchIP() {
             const ipInput = document.getElementById('ipInput').value.trim();
             if (!ipInput) {
-                showError('请输入有效的IP地址、域名或ASN号码');
+                showError('Please enter a valid IP address, domain or ASN number');
                 return;
             }
             
@@ -583,11 +582,11 @@
                         if (data && data.data) {
                             displayResults(data);
                         } else {
-                            showError('无法获取IP信息');
+                            showError('Unable to get IP information');
                         }
                     } catch (e) {
                         // 如果不是有效的JSON，显示错误
-                        console.error("解析JSON失败:", e);
+                        console.error("JSON parsing failed:", e);
                         showError('API返回了非JSON数据，请检查API端点');
                     }
                 })
@@ -692,9 +691,9 @@
         // 获取布尔值标签
         function getBooleanTag(value) {
             if (value === true) {
-                return '<span class="tag tag-true">是</span>';
+                return '<span class="tag tag-true">Yes</span>';
             } else if (value === false) {
-                return '<span class="tag tag-false">否</span>';
+                return '<span class="tag tag-false">No</span>';
             } else {
                 return '-';
             }
