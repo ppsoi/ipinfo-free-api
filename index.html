@@ -351,21 +351,13 @@
                     if (!response.ok) {
                         throw new Error('网络请求失败');
                     }
-                    return response.text();
+                    return response.json();
                 })
-                .then(text => {
-                    try {
-                        // 尝试解析为JSON
-                        const data = JSON.parse(text);
-                        if (data && data.data) {
-                            displayResults(data);
-                        } else {
-                            showError('无法获取IP信息');
-                        }
-                    } catch (e) {
-                        // 如果不是有效的JSON，显示错误
-                        console.error("解析JSON失败:", e);
-                        showError('API返回了非JSON数据，请检查API端点');
+                .then(data => {
+                    if (data && data.data) {
+                        displayResults(data);
+                    } else {
+                        showError('无法获取IP信息');
                     }
                 })
                 .catch(error => {
@@ -393,21 +385,13 @@
                     if (!response.ok) {
                         throw new Error('网络请求失败');
                     }
-                    return response.text();
+                    return response.json();
                 })
-                .then(text => {
-                    try {
-                        // 尝试解析为JSON
-                        const data = JSON.parse(text);
-                        if (data && data.data) {
-                            displayResults(data);
-                        } else {
-                            showError('无法获取IP信息');
-                        }
-                    } catch (e) {
-                        // 如果不是有效的JSON，显示错误
-                        console.error("解析JSON失败:", e);
-                        showError('API返回了非JSON数据，请检查API端点');
+                .then(data => {
+                    if (data && data.data) {
+                        displayResults(data);
+                    } else {
+                        showError('无法获取IP信息');
                     }
                 })
                 .catch(error => {
